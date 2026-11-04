@@ -35,7 +35,9 @@ Claims expire after 3 hours of silence.
    comparison plus 2× crops) and check:
    - every box: crop the same area from the new file and compare with the human's crop — is the complaint gone?
    - outside the boxes: nothing got worse (text, screenshots, logos, colours, edges);
-   - every screenshot is crisp pixel art (RESTORER.md) — a blurry one is an automatic send-back, boxed or not;
+   - every screenshot is crisp pixel art (RESTORER.md) — a blurry one goes back, boxed or not, unless the sources are
+     too soft for an exact rebuild: then accept the sharpest honest best effort and say so; the human judges it.
+     Never hold a game only because its screenshots can't be made perfect;
    - content: text word for word, barcode digits, codes, logos, likeness;
    - against QUALITY.md: would the human approve this next to the ones they approved?
    Send numbered corrections until it's right. Two rounds without progress on a box → have the helper rebuild that

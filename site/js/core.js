@@ -13,7 +13,7 @@ async function loadMarks() {
     MARKS = await (await fetch('/api/rereview', {cache: 'no-store'})).json();
     try { REFS = await (await fetch('/api/refs', {cache: 'no-store'})).json(); } catch (e) {}
     try { APPROVALS = await (await fetch('/api/approval', {cache: 'no-store'})).json(); } catch (e) {}
-    try { FIXQ = {}; for (const q of (await (await fetch('/api/fixqueue', {cache: 'no-store'})).json()).games || []) FIXQ[q.platform + '|' + q.stem] = q; } catch (e) {}
+    try { FIXQ = {}; FIXQ_DATA = await (await fetch('/api/fixqueue', {cache: 'no-store'})).json(); for (const q of FIXQ_DATA.games || []) FIXQ[q.platform + '|' + q.stem] = q; } catch (e) {}
     BASES = await (await fetch('/api/base', {cache: 'no-store'})).json();
   } catch (e) { toast('Could not load saved choices from the server'); }
 }
@@ -45,7 +45,7 @@ for (const g of games) {
   g.flags.unshift('restored');
   if (r.label) g.flags.push('label_restored');
 }
-let FIXQ = {};   // the fix queue (Tools/fix_queue.py): game key → {state, priority, reviewer, faces, ...}
+let FIXQ = {}, FIXQ_DATA = {games: [], recent: []};   // the fix queue (Tools/fix_queue.py): game key → {state, priority, reviewer, faces, ...}
 const FLAGS = { fix_open: 'In the fix queue (waiting for a reviewer)', fix_claimed: 'Being fixed now', fix_waiting: 'Fixed — waiting for your verdict', fix_held: 'Fix on hold', untriaged: 'Restored art you haven\'t judged', you_rejected: 'You rejected', you_approved: 'You approved all its art', check_failed: 'Failed the restore check', rereview: 'Marked for re-review', hasbase: 'Has a chosen restore base', restored: 'Has restored art', changed: 'Pick changed', placeholder: 'Has a green placeholder', wide: 'Has a wide (true-shape) Advance scan',
                 watermark: 'Uses a watermarked image', no_front: 'No usable front', no_back: 'No usable back', no_label: 'No Game Pak label', label_restored: 'Has a restored label' };
 const KIT = window.KIT || {platforms: {}, assets: ['front', 'back', 'spine', 'label'], regions: ['USA', 'Europe', 'Japan', 'Other'], default_regions: ['USA']};

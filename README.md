@@ -80,6 +80,7 @@ python3 tools/fix_queue.py claim S1 --config examples/demo/kit.json
 | L | fill in "blurry" for the selected box (or the whole image) |
 | ← → | in the viewer: step through restored assets and references · in the zoom editor: flip restored ↔ original |
 | J K | next / previous game · Esc: back to the list |
+| Q | the fix queue: handed back (latest first), being fixed, up next, on hold |
 
 ## Files
 | | |

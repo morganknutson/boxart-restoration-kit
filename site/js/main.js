@@ -1,6 +1,6 @@
 // Box art sources — Start-up and live updates.
 readURL();
-loadMarks().then(render);
+loadMarks().then(() => { render(); renderQueuePanel(); });
 
 // Live updates: the box audit server pushes an event whenever restored art, references, marks, restore bases,
 // verdicts or the site itself change (GET /api/events). The page swaps in the new data without a reload and keeps
@@ -37,6 +37,7 @@ async function applyLive() {
   } else {
     render();
   }
+  renderQueuePanel();
   const named = [...new Set(games.map(niceGame))];
   if (named.length) toast('Updated: ' + named.slice(0, 3).join(', ') + (named.length > 3 ? ` and ${named.length - 3} more` : ''));
 }

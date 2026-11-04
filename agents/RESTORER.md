@@ -32,6 +32,11 @@ scan is not a restoration. Rebuild each screenshot as pixel art:
    clean frame as printed: hard pixel edges, no blur, no ringing, no colour noise.
 5. Compare with the original at 4×: every sprite, digit and HUD element must match. Where the scan is too soft to read
    a pixel, keep the original's appearance there rather than guessing.
+6. **When the sources are too soft for an exact rebuild** (the screen pixels can't be read even at 4× in any scan or
+   reference): don't hold the game. Make the screenshot as sharp and clean as the sources allow — deskew, denoise,
+   remove colour casts and creases, rebuild every pixel you CAN read on the grid, and sharpen the rest without changing
+   what it shows — then hand it back and say in your reply which screenshots are "best effort". The user judges whether
+   that is good enough. Never invent HUD digits, sprites or text to fill what can't be read.
 A generator may redraw a screenshot only if the content matches exactly; otherwise use the rebuild above.
 
 ## Fix jobs (the human's boxes)

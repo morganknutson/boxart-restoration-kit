@@ -337,7 +337,14 @@ def build():
         write_quality(queue)
         tmp = os.path.join(FIX, 'queue.json.tmp')
         with open(tmp, 'w') as f:
-            json.dump({'built': time.strftime('%Y-%m-%d %H:%M:%S'), 'games': queue}, f, indent=1, ensure_ascii=False)
+            claims = load('fix/claims.json', {})
+            recent = sorted(({'platform': k.split('|', 1)[0], 'stem': k.split('|', 1)[1], 'state': c.get('state'),
+                              'reviewer': (c.get('reviewer') or '').split('-')[0], 'at': c.get('at'), 'reason': c.get('reason'),
+                              'round': c.get('round', 0)}
+                             for k, c in claims.items() if c.get('state') in ('fixed', 'held', 'claimed')),
+                            key=lambda r: r['at'] or 0, reverse=True)
+            json.dump({'built': time.strftime('%Y-%m-%d %H:%M:%S'), 'games': queue, 'recent': recent[:200]},
+                      f, indent=1, ensure_ascii=False)
         os.replace(tmp, os.path.join(FIX, 'queue.json'))
     return queue
 
@@ -407,6 +414,7 @@ def main():
     if cmd == 'board':
         claims, now = load('fix/claims.json', {}), time.time()
         owner = lambda n: (n or '?').split('-')[0]                # "S1-helper2" counts for S1
+        claims = {k: c for k, c in claims.items() if c.get('reviewer')}          # released claims have no owner
         people = {}
         for gk, c in claims.items():
             p_ = people.setdefault(owner(c.get('reviewer')), {'holding': [], 'done': 0, 'held': 0})
