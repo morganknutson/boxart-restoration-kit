@@ -1,0 +1,8 @@
+# generated demo data and any project's art / outputs / work (copyrighted or personal) — never commit
+examples/demo/art/
+examples/demo/work/
+art/
+work/
+*.tmp
+__pycache__/
+.DS_Store

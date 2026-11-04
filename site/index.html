@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Restoration review</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="sources.css">
+</head>
+<body>
+<aside class="sidebar" id="gameSidebar" aria-label="Game library">
+  <div class="sidebar-top">
+    <div class="sidebar-heading"><h2>Games</h2><button class="chip sidebar-close" id="closeSidebar" type="button" aria-label="Close game list">✕</button></div>
+    <label for="q">Search games</label>
+    <input type="search" id="q" placeholder="Search every game…" autocomplete="off" spellcheck="false" aria-controls="gameNav">
+    <details class="sidebar-filters" id="sidebarFilters">
+      <summary>Filters <span class="filter-summary-count" id="filterCount"></span></summary>
+      <div class="filter-panel">
+        <h3>Review status</h3><div class="controls" id="flagChips"></div>
+        <h3>Platform</h3><div class="controls" id="platChips"></div>
+        <h3>Region</h3><div class="controls" id="regionChips"></div>
+        <label id="pageSize">Per page <select id="per"><option>20</option><option selected>40</option><option>100</option></select></label>
+      </div>
+    </details>
+    <p class="sidebar-count" id="sidebarCount" role="status" aria-live="polite"></p>
+  </div>
+  <ul class="game-nav" id="gameNav" aria-label="All games"></ul>
+</aside>
+<div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+<div class="workspace" id="workspace">
+<header>
+  <div class="site-heading"><button class="chip sidebar-toggle" id="openSidebar" type="button" aria-controls="gameSidebar" aria-expanded="false">☰ Games</button><h1 id="projectTitle">Restoration review</h1>
+    <label class="view-switcher" for="viewMode">View <select id="viewMode" aria-controls="list"></select></label>
+    <label class="view-switcher updated-toggle" for="updatedOnly" style="margin-left:0" title="Show only the restored (updated) images and hide the original scans"><input type="checkbox" id="updatedOnly"> Updated only</label>
+    <button class="chip" id="legendBtn" type="button" title="What the colours and buttons mean" aria-expanded="false" aria-controls="legend">?</button>
+    <button class="chip" id="triageBtn" type="button" title="Judge restored art one image at a time (A approve · R reject · B draw boxes · Space compare)">▶ Triage</button>
+  </div>
+  <div class="sub" id="sub" hidden></div>
+  <div class="legend" id="legend" hidden>
+    <span><span class="key" style="border:3px solid var(--new)"></span>New pick (what the box now uses)</span>
+    <span><span class="key" style="border:3px solid var(--old)"></span>Old pick (when different)</span>
+    <span><span class="key" style="background:#555"></span>Dimmed: flat placeholder, never used</span>
+    <span><span class="key" style="border:3px solid #c58cff"></span>Restored (AI clean-up) — status and model on the badge</span>
+    <span>⚑ re-review &nbsp;·&nbsp; ✎ note &nbsp;·&nbsp; ▭ draw boxes &nbsp;·&nbsp; ★ restore base</span>
+    <span id="dotKey"></span>
+    <span>w/h = width ÷ height</span>
+  </div>
+</header>
+<main>
+  <div class="count-row"><p class="count" id="count"></p><button class="chip" id="browseAll" type="button" hidden>← All matching games</button></div>
+<div id="list"></div>
+  <div class="pager" id="pager"></div>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal"><img id="modalImg" alt=""></div>
+<div id="triage" role="dialog" aria-label="Triage restored art">
+  <div class="tr-bar"><span class="tr-title" id="trTitle"></span><span id="trBadges" class="badges" style="position:static"></span>
+    <span class="tr-prog" id="trProg"></span>
+    <label><input type="checkbox" id="trJudged"> Include judged</label>
+    <label><input type="checkbox" id="trRandom"> Random order</label>
+    <button class="chip" id="trClose" type="button">Close (Esc)</button></div>
+  <div class="tr-body">
+    <div class="tr-main">
+      <div class="tr-stage" id="trStage"><span class="tr-tag" id="trTag">RESTORED</span><img id="trImg" alt=""><img id="trSrc" alt="" hidden><div class="tr-rgn" id="trRgn"></div></div>
+      <div class="tr-meta" id="trMeta"></div>
+      <div class="tr-keys"><button class="chip ok" id="trA" type="button">✓ Approve (A)</button><button class="chip no" id="trR" type="button">✗ Reject (R)</button>
+        <button class="chip" id="trB" type="button">▭ Draw boxes (B)</button><button class="chip" id="trF" type="button">⇄ Compare (hold Space)</button>
+        <button class="chip" id="trP" type="button">← Prev</button><button class="chip" id="trN" type="button">Skip →</button><button class="chip" id="trU" type="button">Undo (Z)</button></div>
+      <div class="tr-help">Hold Space (or F) to swap in the comparison image in place — invented text, missing logos and changed faces jump out. Click a picture on the right to compare against it instead. Approved/rejected faces leave the queue.</div>
+    </div>
+    <div class="tr-side" id="trSide"></div>
+  </div>
+</div>
+<div id="drawer" role="dialog" aria-label="Mark problem areas">
+  <div class="dw-bar"><b id="dwTitle"></b><span class="hint">Drag on the image to box what's wrong · click a box to select it · Delete removes the selected box · Esc saves · ← → compare with the original</span>
+    <span id="dwVerdict" class="vw-verdict" style="margin:0"></span><span class="vw-verdict dw-tools" style="margin:0"><button class="chip" id="dwBase" type="button">★ Restore base</button><button class="chip" id="dwFlag" type="button">⚑ Re-review</button></span><button class="chip" id="dwCancel" type="button" title="Close without saving">Discard</button><button class="chip on" id="dwSave" type="button">Save</button></div>
+  <div class="dw-body">
+    <div class="dw-stage"><span class="dw-tag" id="dwTag" hidden></span><div class="dw-wrap" id="dwWrap"><img id="dwImg" alt="" draggable="false"></div></div>
+    <div class="dw-side"><h3>Problem areas</h3><div id="dwList"></div><h3>Overall note</h3><textarea id="dwNote" placeholder="Optional: what's wrong overall"></textarea><div class="dw-quick"><button class="chip" type="button" data-q="blurry" data-target="note" title="Fill in “blurry” (L when there are no boxes)">Blurry</button><button class="chip" type="button" data-q="artifacts" data-target="note" title="Fill in “artifacts”">Artifacts</button></div></div>
+  </div>
+</div>
+<script src="data/config.js"></script>
+<script src="data/sources.js"></script>
+<script src="data/restored.js"></script>
+<script src="js/core.js"></script>
+<script src="js/list.js"></script>
+<script src="js/viewer.js"></script>
+<script src="js/app.js"></script>
+<script src="js/markup.js"></script>
+<script src="js/triage.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

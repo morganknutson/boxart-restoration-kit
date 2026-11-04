@@ -1,0 +1,21 @@
+{
+  "project": "Demo restoration",
+  "paths": { "art": "art", "restored": "art/restored", "work": "work" },
+  "platforms": {
+    "handheld": { "name": "Demo Handheld", "screen": [160, 144] },
+    "console": { "name": "Demo Console", "screen": [256, 224] }
+  },
+  "assets": {
+    "front": { "min_long_side": 1200 },
+    "back": { "min_long_side": 1200 },
+    "spine": { "min_height": 1400 },
+    "label": { "min_width": 800, "aspect_may_differ": true }
+  },
+  "regions": ["USA", "Europe", "Japan", "Other"],
+  "default_regions": ["USA"],
+  "edition_rule": "US editions only. Check the scans listed below before searching the web.",
+  "allowed_models": [],
+  "port": 8795,
+  "listen": ["127.0.0.1"],
+  "public_url": ""
+}

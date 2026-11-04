@@ -1,0 +1,22 @@
+{
+  "project": "Game Boy box art",
+  "paths": { "art": "art", "restored": "art/restored", "work": "work" },
+  "platforms": {
+    "gb": { "name": "Game Boy", "screen": [160, 144] },
+    "gbc": { "name": "Game Boy Color", "screen": [160, 144] },
+    "gba": { "name": "Game Boy Advance", "screen": [240, 160] }
+  },
+  "assets": {
+    "front": { "min_long_side": 1200 },
+    "back": { "min_long_side": 1200 },
+    "spine": { "min_height": 1400 },
+    "label": { "min_width": 1200, "aspect_may_differ": true }
+  },
+  "regions": ["USA", "Europe", "Japan", "Other"],
+  "default_regions": ["USA"],
+  "edition_rule": "US editions only — a bilingual English/French North American box IS the US edition: keep it as printed (French included), never search for an English-only version. Check the scans listed below before searching the web. See examples/gameboy/NOTES.md.",
+  "allowed_models": [],
+  "port": 8790,
+  "listen": ["127.0.0.1"],
+  "public_url": ""
+}
